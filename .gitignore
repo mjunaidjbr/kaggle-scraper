@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Database
+*.sqlite3
+*.sqlite3-journal
+*.db
+*.db-journal
+
+# Virtualenv
+venv/
+ENV/
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Envirnoment Variables
+.env
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+*.log.*
+
+# Temporary Files
+*.tmp
+*.bak
+*.swp
+
+# Project Specific
+datasets/
