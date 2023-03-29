@@ -181,6 +181,9 @@ for page_num in range(1, 501):
     # Download the files       
     for i in linksDatasetPage:
         try:
+            if i == "https://www.kaggle.com/datasets/dschettler8845/diffusiondb-2m-part-0001-to-0100-of-2000":
+                print("skipping")
+                continue
             #check if the url is already present in the database or not 
             #if present then skip it
             if check_url_present(local_session=local_session, url=i):
