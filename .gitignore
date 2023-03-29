@@ -41,3 +41,12 @@ Desktop.ini
 
 # Project Specific
 datasets/
+
+# wireguard config file
+wg0.conf
+
+# pem file
+scraper-key.pem
+
+#server login details
+server_login_details.txt

@@ -9,6 +9,7 @@ requests = "*"
 selenium = "*"
 sqlalchemy = "*"
 webdriver-manager = "*"
+pipenv = "*"
 
 [dev-packages]
 autopep8 = "*"

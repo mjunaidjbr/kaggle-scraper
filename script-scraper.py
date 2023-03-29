@@ -10,6 +10,17 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
+#constants for the script
+#class name for the a tags in the page
+A_TAGS_CLASS_NAME = "sc-crPCXo kMbriS"
+AUTHOR_CLASS_NAME = "sc-hhGHuG sc-gXSCqU iIhleq fyPHTK"
+TITLE_CLASS_NAME = "sc-iAEyYk sc-fsQiph sc-flFvMs bhyXVy feJEwm fnpKTf"
+SUB_TITLE_CLASS_NAME = "sc-fLQRDB sc-bALXmG sc-ivSfqT kPbSkA JDLpp jpsCju"
+DATASET_DESCRIPTION_CLASS_NAME = "sc-hjzGtE irsToa"
+LICENSE_CLASS_NAME = "sc-dKfzgJ sc-hIqOWS sc-hSMeCy jQQULV dclpAt dJIfeo"
+
+TAGS_CLASS_NAME = "sc-exfGlw iHaITa"
+
 #importing the local database functions file
 from database_functions import add_record,check_url_present,local_session
 
@@ -106,7 +117,8 @@ for i in range(1, 501):
         data_ul = soup.find('ul', class_ = "km-list km-list--three-line")
 
         #get all a tags class = sc-csvncw fmIQhT
-        data_a = data_ul.find_all('a', class_ = "sc-csvncw fmIQhT", href = True)
+   
+        data_a = data_ul.find_all('a', class_ = A_TAGS_CLASS_NAME , href=True)
     
         a_tags = [a.get('href') for a in data_a]
         linksDatasetPage = ["https://www.kaggle.com" + a  for a in a_tags]
@@ -117,7 +129,8 @@ for i in range(1, 501):
 
     except Exception as e:
         print(f"Error occured while scraping the page {fullUrl}")
-        continue 
+        raise e
+        # continue 
 
         
 
@@ -136,29 +149,34 @@ for i in range(1, 501):
             page_soup = BeautifulSoup(driver.page_source, 'html.parser')
 
             #get the author name of the dataset
-            author_name = page_soup.find('span', class_ = "sc-himrzO sc-gXmSlM cwdMZU OBGsx")
+            author_name = page_soup.find('span', class_ = AUTHOR_CLASS_NAME)
             if " and " in author_name.text:
                 author_name = author_name.text.split(" and ")[0]
             else:
                 author_name = author_name.text
 
             #get the dataset title
-            title = page_soup.find('h1', class_ = "sc-iBkjds sc-ftvSup sc-fjOrxA uVZhN lojJbR ehggaj")
+            
+            title = page_soup.find('h1', class_ = TITLE_CLASS_NAME)
             title = title.text
             #get the dataset sub title
-            sub_title = page_soup.find('span', class_ = "sc-fLlhyt sc-bBrHrO sc-ivmvlL dqYtFM bbgeuT haNzR")
+            
+            sub_title = page_soup.find('span', class_ = SUB_TITLE_CLASS_NAME)
             sub_title = sub_title.text
 
             #get the dataset description
-            dataset_description = page_soup.find('div', class_ = "sc-eZkcaX hQBQJi")
+            
+            dataset_description = page_soup.find('div', class_ = DATASET_DESCRIPTION_CLASS_NAME)
             dataset_description = dataset_description.text
 
             #get the dataset license
-            license_ =  page_soup.find('p', class_ = "sc-dIouRR sc-hHLeRK sc-RwCYN fEntCw eCYtny btcjNE")
+            
+            license_ =  page_soup.find('p', class_ = LICENSE_CLASS_NAME)
             license_ = license_.text
 
             #get dataset tags
-            tags_ = page_soup.find_all('button', class_ = "sc-gvRZDQ fGDCKK")
+            
+            tags_ = page_soup.find_all('button', class_ = TAGS_CLASS_NAME)
             tags_ = [tag.text for tag in tags_]
             #, separated string
             tags_ = ",".join(tags_)
@@ -204,9 +222,12 @@ for i in range(1, 501):
                 add_record(local_session=local_session, url=str(i), download_link=str(dataset_download_link), base_folder_path=str(OUTPUT_FOLDER), path=str(path_of_zip_file), author_name=str(author_name), title=str(title), sub_title=str(sub_title), about_dataset=str(dataset_description), license=str(license_), tags=str(tags_) )
             except Exception as e:
                 print("failed to insert record into the database: ", e)
-                continue
+                raise e
+                # continue
+
         except Exception as e:
             print(f"failed to download the dataset: {i}" , e)
+            raise e
             continue
     
 
