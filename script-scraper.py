@@ -94,14 +94,58 @@ mainUrl = "https://www.kaggle.com/datasets?page="
 #list of links for all pages
 listOfDataSetsLinks = []
 
-for i in range(1, 501):
+for page_num in range(1, 501):
+
+    if page_num % 2 == 0:
+        driver.quit()
+        print(f"Scraping page {page_num}")
+        options = Options()
+        options.headless = True
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+
+
+
+        #set driver download path 
+        # setting the download path 
+        driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+        params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': TMP_FOLDER}}
+        command_result = driver.execute("send_command", params)
+
+
+        # Login to Kaggle 
+        # email 
+        email = "nogew43062@kaudat.com"
+        # password 
+        password = "kagglepassword"
+
+        #username
+        # username = "kaudatunique"
+
+        #check if the email and password are not empty 
+        if email == None or password == None:
+            print("Please enter your email and password in the script.py file")
+            exit()
+            
+
+        signInUrl = "https://www.kaggle.com/account/login?phase=emailSignIn" 
+        driver.get(signInUrl)
+        emailXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[1]/div/label/input" 
+        email_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, emailXPath)))
+        email_input.send_keys(email)
+        passwordXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[2]/div/label/input"
+        password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, passwordXPath)))
+        password_input.send_keys(password)
+        signInXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[3]/button/span"
+        signInButton = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, signInXPath)))
+        signInButton.click()
+        time.sleep(5)
 
     
     #list of links for each page
     linksDatasetPage = []
     
     # Create the full url
-    fullUrl = mainUrl + str(i)
+    fullUrl = mainUrl + str(page_num)
     try:
         # Go to the page you want to scrape
         driver.get(fullUrl)
