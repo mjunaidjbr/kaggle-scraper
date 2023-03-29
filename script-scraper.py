@@ -171,8 +171,9 @@ for i in range(1, 501):
 
             #get the dataset license
             
-            license_ =  page_soup.find('p', class_ = LICENSE_CLASS_NAME)
-            license_ = license_.text
+            # license_ =  page_soup.find('p', class_ = LICENSE_CLASS_NAME)
+            # license_ = license_.text
+            license_ = "None"
 
             #get dataset tags
             
