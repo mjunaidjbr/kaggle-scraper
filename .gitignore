@@ -49,4 +49,4 @@ wg0.conf
 scraper-key.pem
 
 #server login details
-server_login_detail.txt
+server_login_details_.txt
