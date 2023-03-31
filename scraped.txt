@@ -1,0 +1,3 @@
+https://www.kaggle.com/datasets/usamabuttar/world-happiness-report-2005-present
+https://www.kaggle.com/datasets/ghassenkhaled/wine-quality-data
+https://www.kaggle.com/datasets/ulrikthygepedersen/co2-emissions-by-country
