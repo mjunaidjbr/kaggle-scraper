@@ -9,7 +9,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-import datetime
 
 #constants for the script
 #class name for the a tags in the page
@@ -174,7 +173,7 @@ for page_num in range(1, 501):
 
     except Exception as e:
         print(f"Error occured while scraping the page {fullUrl}")
-        # raise e
+        raise e
         # continue 
 
         
@@ -182,8 +181,7 @@ for page_num in range(1, 501):
     # Download the files       
     for i in linksDatasetPage:
         try:
-            
-            if "dschettler8845" in i:
+            if i == "https://www.kaggle.com/datasets/dschettler8845/diffusiondb-2m-part-0001-to-0100-of-2000":
                 print("skipping")
                 continue
             #check if the url is already present in the database or not 
@@ -275,14 +273,27 @@ for page_num in range(1, 501):
                 add_record(local_session=local_session, url=str(i), download_link=str(dataset_download_link), base_folder_path=str(OUTPUT_FOLDER), path=str(path_of_zip_file), author_name=str(author_name), title=str(title), sub_title=str(sub_title), about_dataset=str(dataset_description), license=str(license_), tags=str(tags_) )
             except Exception as e:
                 print("failed to insert record into the database: ", e)
-                # raise e
+                raise e
                 # continue
-
-            #scraped.txt 
-            with open("scraped.txt", "a") as f:
-                f.write(i + " scrapped on " + str(datetime.now()) + "\n")
 
         except Exception as e:
             print(f"failed to download the dataset: {i}" , e)
-            # raise e
+            raise e
             continue
+    
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
