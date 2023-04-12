@@ -34,7 +34,8 @@ class WebScraper:
         else:
             logger.error(f'Invalid browser: {browser}')
             raise ValueError(f'Invalid browser: {browser}')
-
+        self.browser = browser
+        self.headless = headless
         self.parser = parser
 
     def chrome_init(self, headless=True):
@@ -94,3 +95,6 @@ class WebScraper:
         except Exception as e:
             logger.error(f'Error quitting driver: {e}')
             raise e
+
+    def __repr__(self) -> str:
+        return f'WebScraper(browser={self.browser}, headless={self.headless})'
