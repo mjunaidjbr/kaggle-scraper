@@ -40,7 +40,7 @@ Desktop.ini
 *.swp
 
 # Project Specific
-datasets/
+datasets/*
 
 # wireguard config file
 wg0.conf
