@@ -34,6 +34,7 @@ Desktop.ini
 *.log
 *.log.*
 
+
 # Temporary Files
 *.tmp
 *.bak
@@ -50,3 +51,5 @@ scraper-key.pem
 
 #server login details
 server_login_details_.txt
+
+#others

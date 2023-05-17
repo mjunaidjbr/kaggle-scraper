@@ -40,7 +40,7 @@ class Record(Base):
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE_FILE_NAME = "datasets_db.db"
-engine = create_engine("sqlite:///"+ os.path.join(BASE_DIR, DATABASE_FILE_NAME), echo=True)
+engine = create_engine("sqlite:///"+ os.path.join(BASE_DIR, DATABASE_FILE_NAME), echo=False)
 
 session = sessionmaker()
 

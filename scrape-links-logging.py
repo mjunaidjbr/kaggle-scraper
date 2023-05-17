@@ -9,17 +9,28 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
+import warnings
+#ignore warnings of depricated warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+from defaults import *
+import logging
+#save the logs in a file
+LOG_FILE_NAME = "links_scrapping_logs.log"
 
 #constants for the script
 #class name for the a tags in the page
-A_TAGS_CLASS_NAME = "sc-fYzRkI Rhwmm"
-AUTHOR_CLASS_NAME = "sc-hhGHuG sc-gXSCqU iIhleq fyPHTK"
-TITLE_CLASS_NAME = "sc-iAEyYk sc-fsQiph sc-flFvMs bhyXVy feJEwm fnpKTf"
-SUB_TITLE_CLASS_NAME = "sc-fLQRDB sc-bALXmG sc-ivSfqT kPbSkA JDLpp jpsCju"
-DATASET_DESCRIPTION_CLASS_NAME = "sc-hjzGtE irsToa"
-LICENSE_CLASS_NAME = "sc-dKfzgJ sc-hIqOWS sc-hSMeCy jQQULV dclpAt dJIfeo"
+# A_TAGS_CLASS_NAME = "sc-GJyyB hmKQqM"
+# AUTHOR_CLASS_NAME = "sc-hhGHuG sc-gXSCqU iIhleq fyPHTK"
+# TITLE_CLASS_NAME = "sc-iAEyYk sc-fsQiph sc-pTqjN bhyXVy feJEwm lcZWRG"
+# SUB_TITLE_CLASS_NAME = "sc-fLQRDB sc-bALXmG sc-hMRyxU kPbSkA JDLpp dZNkES"
+# DATASET_DESCRIPTION_CLASS_NAME = "sc-dmLtQE jWwnsR"
+# LICENSE_CLASS_NAME = "sc-dKfzgJ sc-hIqOWS sc-eiwPGB jQQULV dclpAt eTlxRD"
+# TAGS_CLASS_NAME = "sc-hJGKTP dzaWn"
 
-TAGS_CLASS_NAME = "sc-exfGlw iHaITa"
+#logging configuration
+logging.basicConfig(filename=LOG_FILE_NAME, level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+
+logging.info("Starting the script to scrape the links")
 
 #text file
 TEXT_FILE_NAME = "links.txt"
@@ -76,7 +87,8 @@ password = "kagglepassword"
 
 #check if the email and password are not empty 
 if email == None or password == None:
-    print("Please enter your email and password in the script.py file")
+    # print("Please enter your email and password in the script.py file")
+    logging.error("Please enter your email and password in the script.py file")
     exit()
     
 
@@ -102,7 +114,8 @@ listOfDataSetsLinks = []
 numberOfPages = input("Enter the number of pages you want to scrape: ")
 startPage = input("Enter the start page: ")
 for page_num in range(int(startPage), (int(numberOfPages) + int(startPage))):
-    print(f"Scraping page {page_num}")
+    # print(f"Scraping page {page_num}")
+    logging.info(f"Scraping page {page_num}")
     if page_num % 2 == 0:
         driver.quit()
         
@@ -130,7 +143,8 @@ for page_num in range(int(startPage), (int(numberOfPages) + int(startPage))):
 
         #check if the email and password are not empty 
         if email == None or password == None:
-            print("Please enter your email and password in the script.py file")
+            # print("Please enter your email and password in the script.py file")
+            logging.error("Please enter your email and password in the {os.path.basename(__file__)} file")
             exit()
             
 
@@ -184,6 +198,11 @@ for page_num in range(int(startPage), (int(numberOfPages) + int(startPage))):
         listOfDataSetsLinks.extend(linksDatasetPage)
 
     except Exception as e:
-        print(f"Error occured while scraping the page {fullUrl}")
+        # print(f"Error occured while scraping the page {fullUrl}")
+        logging.error(f"Error occured while scraping the page {fullUrl}")
+        logging.error(f"Error: {e}")
         raise e
+
         # continue 
+
+logging.info("Scraping of {numberOfPages} pages from {startPage} to {int(numberOfPages) + int(startPage)} completed successfully")
