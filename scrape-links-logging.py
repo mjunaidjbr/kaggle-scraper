@@ -28,7 +28,7 @@ LOG_FILE_NAME = "links_scrapping_logs.log"
 # TAGS_CLASS_NAME = "sc-hJGKTP dzaWn"
 
 #logging configuration
-logging.basicConfig(filename=LOG_FILE_NAME, level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(filename=LOG_FILE_NAME, level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s',force=True)
 
 logging.info("Starting the script to scrape the links")
 
@@ -205,4 +205,4 @@ for page_num in range(int(startPage), (int(numberOfPages) + int(startPage))):
 
         # continue 
 
-logging.info("Scraping of {numberOfPages} pages from {startPage} to {int(numberOfPages) + int(startPage)} completed successfully")
+logging.info(f"Scraping of {numberOfPages} pages from {startPage} to {int(numberOfPages) + int(startPage)} page number completed successfully")

@@ -53,3 +53,5 @@ scraper-key.pem
 server_login_details_.txt
 
 #others
+success.txt
+error.txt

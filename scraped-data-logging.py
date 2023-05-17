@@ -15,12 +15,34 @@ import warnings
 #ignore deprecation warnings 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+
+#code for blacklisting the urls
+#blacklist urls
+#check blacklist file exists or not
+BLACKLIST_FILE_NAME = "blacklist.txt"
+if os.path.exists(BLACKLIST_FILE_NAME):
+    with open(BLACKLIST_FILE_NAME, 'r') as f:
+        blacklist = f.read().splitlines()
+    logging.info(f"blacklist urls are {blacklist}")
+else:
+    blacklist = []
+
+
+
+
+
+
+
+
+
+
+
 #save the logs in a file
 LOG_FILE_NAME = "data_scrapping_logs.log"
 # Set the logging configuration
 # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 #to save the logs in a file
-logging.basicConfig(filename=LOG_FILE_NAME, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename=LOG_FILE_NAME, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s',force=True)
 
 
 logging.info("program started to scrape the data from the links")
@@ -207,6 +229,9 @@ linksDatasetPage = []
 with open(INPUT_FILE_NAME, 'r') as f:
     linksDatasetPage = f.readlines()
     linksDatasetPage = [x.strip() for x in linksDatasetPage]
+    #remove the elements that are in blacklist from linksDatasetPage
+    linksDatasetPage = [x for x in linksDatasetPage if x not in blacklist]
+
 
         
 
