@@ -42,7 +42,8 @@ Desktop.ini
 
 # Project Specific
 datasets/
-
+backup/
+project_backup/
 # wireguard config file
 wg0.conf
 

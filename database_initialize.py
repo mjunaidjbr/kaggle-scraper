@@ -31,12 +31,12 @@ class Record(Base):
     download_link = Column(String(255), nullable=False)
     base_folder_path = Column(String(255), nullable=False, index=True)
     path = Column(String(255), nullable=False, index=True)
-    author_name = Column(String(255), nullable=False, index=True)
-    title = Column(String(255), nullable=False, index=True, unique=True) 
-    sub_title = Column(String(255), nullable=False, index=True)
-    about_dataset = Column(Text, nullable=False, index=True)
-    license = Column(String(255), nullable=False, index=True)
-    tags = Column(String(255), nullable=False, index=True)
+    author_name = Column(String(255), nullable=True, index=True)
+    title = Column(String(255), nullable=True, index=True) 
+    sub_title = Column(String(255), nullable=True, index=True)
+    about_dataset = Column(Text, nullable=True, index=True)
+    license = Column(String(255), nullable=True, index=True)
+    tags = Column(String(255), nullable=True, index=True)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE_FILE_NAME = "datasets_db.db"

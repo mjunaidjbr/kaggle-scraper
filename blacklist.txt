@@ -1,0 +1,2 @@
+https://www.kaggle.com/datasets/desalegngeb/students-exam-scores
+https://www.kaggle.com/datasets/mykhailozub/500-hotels-from-airbnb-booking-and-hotelscom

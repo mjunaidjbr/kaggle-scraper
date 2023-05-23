@@ -3,7 +3,7 @@ import os
 from defaults import *
 import time
 import shutil
-from selenium import webdriver
+# from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -14,6 +14,15 @@ import logging
 import warnings
 #ignore deprecation warnings 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+from seleniumwire import webdriver
+
+options1 = {
+    'proxy': {
+        'http': 'http://5.161.125.70:8080',
+        'https': 'http://5.161.125.70:8080',
+        'no_proxy': 'localhost,127.0.0.1' # excludes
+    }
+}
 
 
 #code for blacklisting the urls
@@ -95,7 +104,10 @@ if not os.path.exists(TMP_FOLDER):
 #driver in headless mode
 options = Options()
 options.headless = True
-driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+options.add_argument('--no-sandbox')
+options.add_argument('--ignore-certificate-errors-spki-list')
+options.add_argument('--ignore-ssl-errors')
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=options, seleniumwire_options=options1)
 
 
 
@@ -247,7 +259,12 @@ for val,i in enumerate(linksDatasetPage, start=1):
             # print(f"Scraping page {page_num}")
             options = Options()
             options.headless = True
-            driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+            options.add_argument('--no-sandbox')
+            options.add_argument('--ignore-certificate-errors-spki-list')
+            options.add_argument('--ignore-ssl-errors')
+            # PROXY="167.71.241.136:33299"
+            # options.add_argument('--proxy-server=%s' % PROXY)
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=options, seleniumwire_options=options1)
 
 
 
@@ -298,8 +315,22 @@ for val,i in enumerate(linksDatasetPage, start=1):
 
         dataset_download_link = i + "/download"
         driver.get(i)
-        
-
+        time.sleep(5)
+        #check the download button is present or not
+        try:
+            # download_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "/html/body/main/div[1]/div/div[6]/div[2]/div/div[2]/div[1]/div/a/button")))
+            #clickable
+            download_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "/html/body/main/div[1]/div/div[6]/div[2]/div/div[2]/div[1]/div/a/button")))
+        except Exception as e:
+            # print("download button not present")
+            logging.error("download button not present in the link: %s", i)
+            #also except the error in the error file
+            logging.error("exception: %s", e)
+            #paste the link to error file
+            #append the link to blacklist file
+            with open(BLACKLIST_FILE_NAME, "a") as f:
+                f.write(i + "\n")
+            continue
 
         time.sleep(5)
         page_soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -349,7 +380,8 @@ for val,i in enumerate(linksDatasetPage, start=1):
             os.mkdir(full_author_folder_path)
         
         #download the dataset
-        driver.get(dataset_download_link)
+        # driver.get(dataset_download_link)
+        download_button.click()
         #while archive.zip is not downloaded wait
         while not os.path.exists(os.path.join(TMP_FOLDER, "archive.zip")):
             time.sleep(3)
@@ -374,6 +406,27 @@ for val,i in enumerate(linksDatasetPage, start=1):
         # print("path_of_zip_file: ", path_of_zip_file)
         # print("path_of_zip_file_updated: ", path_of_zip_file_updated)
 
+        #check tags_ empty or not if empty then set it to None
+        if tags_ == "":
+            tags_ = "None"
+        #check sub_title empty or not if empty then set it to None
+        if sub_title == "":
+            sub_title = "None"
+        #check author_name empty or not if empty then set it to None
+        if author_name == "":
+            author_name = "None"
+        #check license_ empty or not if empty then set it to None
+        if license_ == "":
+            license_ = "None"
+        #check dataset_description empty or not if empty then set it to None
+        if dataset_description == "":
+            dataset_description = "None"
+        #check title empty or not if empty then set it to None
+        if title == "":
+            title = "None"
+        
+
+
         #insert the data into the database
         try:
             add_record(local_session=local_session, url=str(i), download_link=str(dataset_download_link), base_folder_path=str(OUTPUT_FOLDER), path=str(path_of_zip_file), author_name=str(author_name), title=str(title), sub_title=str(sub_title), about_dataset=str(dataset_description), license=str(license_), tags=str(tags_) )
@@ -382,6 +435,15 @@ for val,i in enumerate(linksDatasetPage, start=1):
             logging.error("failed to insert record into the database: %s", e)
             #also except the error in the error file
             logging.error("exception: %s", e)
+
+            #roll back the session
+            local_session.rollback()
+
+            try:
+                #commit the session
+                local_session.commit()
+            except Exception as e:
+                print("failed to commit the session: ", e)
             #paste the link to error file
             with open(ERROR_FILE_NAME, "a") as f:
                 f.write(i + "\n")

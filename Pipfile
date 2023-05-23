@@ -10,6 +10,7 @@ selenium = "*"
 sqlalchemy = "*"
 webdriver-manager = "*"
 pipenv = "*"
+selenium-wire = "*"
 
 [dev-packages]
 autopep8 = "*"
