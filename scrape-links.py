@@ -65,7 +65,7 @@ if not os.path.exists(TMP_FOLDER):
 #driver in headless mode
 options = Options()
 options.headless = True
-driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+driver = webdriver.Chrome(options=options)
 
 
 
@@ -121,7 +121,7 @@ for page_num in range(int(startPage), (int(numberOfPages) + int(startPage))):
         
         options = Options()
         options.headless = True
-        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        driver = webdriver.Chrome(options=options)
 
 
 

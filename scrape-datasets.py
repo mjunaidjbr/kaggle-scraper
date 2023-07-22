@@ -3,26 +3,18 @@ import os
 from defaults import *
 import time
 import shutil
-# from selenium import webdriver
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import logging
 import warnings
 #ignore deprecation warnings 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-from seleniumwire import webdriver
 
-options1 = {
-    'proxy': {
-        'http': 'http://5.161.125.70:8080',
-        'https': 'http://5.161.125.70:8080',
-        'no_proxy': 'localhost,127.0.0.1' # excludes
-    }
-}
 
 
 #code for blacklisting the urls
@@ -104,10 +96,7 @@ if not os.path.exists(TMP_FOLDER):
 #driver in headless mode
 options = Options()
 options.headless = True
-options.add_argument('--no-sandbox')
-options.add_argument('--ignore-certificate-errors-spki-list')
-options.add_argument('--ignore-ssl-errors')
-driver = webdriver.Chrome(ChromeDriverManager().install(), options=options, seleniumwire_options=options1)
+driver = webdriver.Chrome(options=options)
 
 
 
@@ -145,7 +134,7 @@ password_input.send_keys(password)
 signInXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[3]/button/span"
 signInButton = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, signInXPath)))
 signInButton.click()
-time.sleep(5)
+time.sleep(15)
 
 
 # Scrape the page
@@ -259,12 +248,9 @@ for val,i in enumerate(linksDatasetPage, start=1):
             # print(f"Scraping page {page_num}")
             options = Options()
             options.headless = True
-            options.add_argument('--no-sandbox')
-            options.add_argument('--ignore-certificate-errors-spki-list')
-            options.add_argument('--ignore-ssl-errors')
             # PROXY="167.71.241.136:33299"
             # options.add_argument('--proxy-server=%s' % PROXY)
-            driver = webdriver.Chrome(ChromeDriverManager().install(), options=options, seleniumwire_options=options1)
+            driver = webdriver.Chrome( options=options)
 
 
 
@@ -353,8 +339,9 @@ for val,i in enumerate(linksDatasetPage, start=1):
 
         #get the dataset description
         
-        dataset_description = page_soup.find('div', class_ = DATASET_DESCRIPTION_CLASS_NAME)
-        dataset_description = dataset_description.text
+        # dataset_description = page_soup.find('div', class_ = DATASET_DESCRIPTION_CLASS_NAME)
+        # dataset_description = dataset_description.text
+        dataset_description=""
 
         #get the dataset license
         

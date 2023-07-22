@@ -56,3 +56,6 @@ server_login_details_.txt
 #others
 success.txt
 error.txt
+
+#driver
+chromedriver
