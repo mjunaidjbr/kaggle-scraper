@@ -6,14 +6,15 @@ name = "pypi"
 [packages]
 beautifulsoup4 = "*"
 requests = "*"
+selenium = "*"
 sqlalchemy = "*"
+webdriver-manager = "*"
 pipenv = "*"
-selenium = "==4.1.0"
+selenium-wire = "*"
 
 [dev-packages]
 autopep8 = "*"
 pylint = "*"
-ipykernel = "*"
 
 [requires]
 python_version = "3.10"

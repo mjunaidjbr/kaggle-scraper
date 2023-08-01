@@ -26,7 +26,3 @@ def check_url_present(local_session,url):
     else:
         return False
     
-#get url
-def get_data_from_id(local_session,id_number):
-    return local_session.query(Record).filter(Record.id == id_number).first()
-
