@@ -47,7 +47,7 @@ options1 = {
 # }
 options= webdriver.ChromeOptions()
 # options.headless = True
-driver = webdriver.Chrome(ChromeDriverManager().install(),options=options, seleniumwire_options=options1)
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 driver.get(url=url)
 
