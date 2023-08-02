@@ -108,7 +108,7 @@ command_result = driver.execute("send_command", params)
 
 # Login to Kaggle 
 # email 
-email = "nogew43062@kaudat.com"
+email = "wayilay686@inkiny.com"
 # password 
 password = "kagglepassword"
 
