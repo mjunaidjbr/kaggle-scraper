@@ -9,7 +9,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from database_functions import add_record,check_url_present,local_session,get_data_from_id
-
+import logging
+import os
+LOG_FILE_NAME="update_dataset_record.log"
+#check file exists
+if not os.path.exists(LOG_FILE_NAME):
+    open(LOG_FILE_NAME, "w")
+logging.basicConfig(filename=LOG_FILE_NAME, level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s',force=True)
+logging.info("Starting the script to update the dataset records")
 #get the input from user
 number_of_datasets = int(input("Number of datasets to process: "))
 start_number = int(input("start id number of dataset: "))
@@ -53,16 +60,17 @@ time.sleep(15)
 
 
 
-for i in range(start_number, (number_of_datasets+1)):
+for i in range(start_number, (start_number+number_of_datasets+1)):
 
     # print(get_url_from_id(local_session,1))
     try:
         row = get_data_from_id(local_session,i)
     except:
-        print(f"datasets successfully updated from id {str(start_number)} to {str(i)}")
+        logging.info(f"datasets successfully updated from id {str(start_number)} to {str(i)}")
 
     #initializing the chrome driver 
     if i%5 == 0:
+        driver.quit()
         #driver in headless mode
         options = Options()
         options.headless = True
@@ -103,7 +111,7 @@ for i in range(start_number, (number_of_datasets+1)):
     url = str(row.url)
 
     driver.get(url)
-    time.sleep(10)
+    time.sleep(5)
 
     page_soup = BeautifulSoup(driver.page_source, 'html.parser')
 
@@ -181,4 +189,4 @@ for i in range(start_number, (number_of_datasets+1)):
     row.tags = tags
 
     local_session.commit()
-    print(f"Row with id {str(i)} has been updated")
+    logging.info(f"Row with id {str(i)} has been updated")

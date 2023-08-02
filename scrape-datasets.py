@@ -8,7 +8,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-# from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import logging
 import warnings
@@ -143,87 +142,6 @@ mainUrl = "https://www.kaggle.com/datasets?page="
 #list of links for all pages
 listOfDataSetsLinks = []
 
-# for page_num in range(1, 501):
-
-#     if page_num % 2 == 0:
-#         driver.quit()
-#         print(f"Scraping page {page_num}")
-#         options = Options()
-#         options.headless = True
-#         driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-
-
-
-#         #set driver download path 
-#         # setting the download path 
-#         driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
-#         params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': TMP_FOLDER}}
-#         command_result = driver.execute("send_command", params)
-
-
-#         # Login to Kaggle 
-#         # email 
-#         email = "nogew43062@kaudat.com"
-#         # password 
-#         password = "kagglepassword"
-
-#         #username
-#         # username = "kaudatunique"
-
-#         #check if the email and password are not empty 
-#         if email == None or password == None:
-#             print("Please enter your email and password in the script.py file")
-#             exit()
-            
-
-#         signInUrl = "https://www.kaggle.com/account/login?phase=emailSignIn" 
-#         driver.get(signInUrl)
-#         emailXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[1]/div/label/input" 
-#         email_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, emailXPath)))
-#         email_input.send_keys(email)
-#         passwordXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[2]/div/label/input"
-#         password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, passwordXPath)))
-#         password_input.send_keys(password)
-#         signInXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[3]/button/span"
-#         signInButton = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, signInXPath)))
-#         signInButton.click()
-#         time.sleep(5)
-
-    
-    # #list of links for each page
-    # linksDatasetPage = []
-    
-    # # Create the full url
-    # fullUrl = mainUrl + str(page_num)
-    # try:
-    #     # Go to the page you want to scrape
-    #     driver.get(fullUrl)
-    #     # Wait for the page to load
-    #     time.sleep(5)
-    #     # Get the page source
-    #     soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-    #     # scrape page logic here
-    #     #get the table 
-
-    #     # ul and class = km-list km-list--three-line
-    #     data_ul = soup.find('ul', class_ = "km-list km-list--three-line")
-
-    #     #get all a tags class = sc-csvncw fmIQhT
-   
-    #     data_a = data_ul.find_all('a', class_ = A_TAGS_CLASS_NAME , href=True)
-    
-    #     a_tags = [a.get('href') for a in data_a]
-    #     linksDatasetPage = ["https://www.kaggle.com" + a  for a in a_tags]
-    #     # print("list of links:", linksDatasetPage)
-
-    #     #add the links to the listOfDataSetsLinks list
-    #     listOfDataSetsLinks.extend(linksDatasetPage)
-
-    # except Exception as e:
-    #     print(f"Error occured while scraping the page {fullUrl}")
-    #     raise e
-    #     # continue 
 linksDatasetPage = []
 
 #get the data from the links.txt file
@@ -322,39 +240,56 @@ for val,i in enumerate(linksDatasetPage, start=1):
         page_soup = BeautifulSoup(driver.page_source, 'html.parser')
 
         #get the author name of the dataset
-        author_name = page_soup.find('span', class_ = AUTHOR_CLASS_NAME)
-        if " and " in author_name.text:
-            author_name = author_name.text.split(" and ")[0]
-        else:
-            author_name = author_name.text
+
+        try:
+            author_name = page_soup.find('span', class_ = AUTHOR_CLASS_NAME)
+            if " and " in author_name.text:
+                author_name = author_name.text.split(" and ")[0]
+            else:
+                author_name = author_name.text
+        except:
+            author_name = ""
 
         #get the dataset title
-        
-        title = page_soup.find('h1', class_ = TITLE_CLASS_NAME)
-        title = title.text
+        try:
+            title = page_soup.find('h1', class_ = TITLE_CLASS_NAME)
+            title = title.text
+        except:
+            title = ""
+
         #get the dataset sub title
-        
-        sub_title = page_soup.find('span', class_ = SUB_TITLE_CLASS_NAME)
-        sub_title = sub_title.text
+        try:
+            sub_title = page_soup.find('span', class_ = SUB_TITLE_CLASS_NAME)
+            sub_title = sub_title.text
+        except:
+            sub_title = ""
+
 
         #get the dataset description
-        
-        # dataset_description = page_soup.find('div', class_ = DATASET_DESCRIPTION_CLASS_NAME)
-        # dataset_description = dataset_description.text
-        dataset_description=""
+        try:
+            dataset_description = page_soup.find('div',text='About Dataset')
+            dataset_description = dataset_description.find_next_sibling('div')
+            dataset_description = dataset_description.text
+        except:
+            dataset_description = ""
 
-        #get the dataset license
-        
-        # license_ =  page_soup.find('p', class_ = LICENSE_CLASS_NAME)
-        # license_ = license_.text
-        license_ = "None"
+        #get the dataset license        
+        try:
+            license_ = page_soup.find('h2', text="License")
+            license_ = license_.find_next_sibling('p')
+            license_ = license_.text
+        except:
+            license_ = ""
 
         #get dataset tags
-        
-        tags_ = page_soup.find_all('button', class_ = TAGS_CLASS_NAME)
-        tags_ = [tag.text for tag in tags_]
-        #, separated string
-        tags_ = ",".join(tags_)
+        try:
+            tags_ = page_soup.find('h2', text="Tags")
+            tags_ = tags_.find_next_sibling('div')
+            tags_ = tags_.find_all('span')
+            tags_ = [tag.text for tag in tags_]
+            tags_ = ",".join(tags_)
+        except:
+            tags_ = ""
 
         # https://www.kaggle.com/datasets/rayhan32/nba-player-status-2003-2023-23k-data
         link_= i.replace("https://www.kaggle.com/datasets/", "")
