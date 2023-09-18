@@ -16,15 +16,6 @@ import logging
 #save the logs in a file
 LOG_FILE_NAME = "links_scrapping_logs.log"
 
-#constants for the script
-#class name for the a tags in the page
-# A_TAGS_CLASS_NAME = "sc-GJyyB hmKQqM"
-# AUTHOR_CLASS_NAME = "sc-hhGHuG sc-gXSCqU iIhleq fyPHTK"
-# TITLE_CLASS_NAME = "sc-iAEyYk sc-fsQiph sc-pTqjN bhyXVy feJEwm lcZWRG"
-# SUB_TITLE_CLASS_NAME = "sc-fLQRDB sc-bALXmG sc-hMRyxU kPbSkA JDLpp dZNkES"
-# DATASET_DESCRIPTION_CLASS_NAME = "sc-dmLtQE jWwnsR"
-# LICENSE_CLASS_NAME = "sc-dKfzgJ sc-hIqOWS sc-eiwPGB jQQULV dclpAt eTlxRD"
-# TAGS_CLASS_NAME = "sc-hJGKTP dzaWn"
 
 #logging configuration
 logging.basicConfig(filename=LOG_FILE_NAME, level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s',force=True)
@@ -93,13 +84,13 @@ if email == None or password == None:
 
 signInUrl = "https://www.kaggle.com/account/login?phase=emailSignIn" 
 driver.get(signInUrl)
-emailXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[1]/div/label/input" 
+# emailXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[1]/div/label/input" 
 email_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, emailXPath)))
 email_input.send_keys(email)
-passwordXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[2]/div/label/input"
+# passwordXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[2]/div/label/input"
 password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, passwordXPath)))
 password_input.send_keys(password)
-signInXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[3]/button/span"
+# signInXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[3]/button/span"
 signInButton = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, signInXPath)))
 signInButton.click()
 time.sleep(5)
@@ -149,13 +140,14 @@ for page_num in range(int(startPage), (int(numberOfPages) + int(startPage))):
 
         signInUrl = "https://www.kaggle.com/account/login?phase=emailSignIn" 
         driver.get(signInUrl)
-        emailXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[1]/div/label/input" 
+        # emailXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[1]/div/label/input" 
+                      
         email_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, emailXPath)))
         email_input.send_keys(email)
-        passwordXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[2]/div/label/input"
+        # passwordXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[2]/div/label/input"
         password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, passwordXPath)))
         password_input.send_keys(password)
-        signInXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[3]/button/span"
+        # signInXPath = "/html/body/main/div[1]/div/div[4]/div[2]/form/div[2]/div[3]/button/span"
         signInButton = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, signInXPath)))
         signInButton.click()
         time.sleep(5)
